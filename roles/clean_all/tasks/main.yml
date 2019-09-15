@@ -1,0 +1,27 @@
+---
+# EXPORTERS
+- include_tasks: exporters.yml
+
+# PROMETHEUS
+- name: check if prometheus is installed
+  stat:
+    path: "{{ prometheus.config_dir }}"
+  register: clean_prometheus
+
+- include_tasks: prometheus.yml
+  when: clean_prometheus.stat.exists
+
+# ALERTMANAGER
+- name: check if alertmanaer is installed
+  stat:
+    path: "{{ alertmanager.config_dir }}"
+  register: clean_alertmanager
+
+- include_tasks: alertmanager.yml
+  when: clean_alertmanager.stat.exists
+
+# GRAFANA
+- include_tasks: grafana.yml
+
+# DELETE USER / GROUP
+- include_tasks: user.yml

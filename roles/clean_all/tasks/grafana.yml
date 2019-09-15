@@ -1,0 +1,22 @@
+---
+- name: remove grafana package
+  package:
+    name: grafana
+    state: absent
+
+- name: stopped grafana service
+  service:
+    name: grafana-server
+    state: stopped
+    enabled: no
+
+- name: delete all directories and files
+  file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - "{{ grafana.data_dir | dirname }}"
+    - "{{ grafana.logs_dir }}"
+    - "{{ grafana.plugins_dir | dirname }}"
+    - "{{ grafana.provisioning_dir | dirname }}"
+  notify: "reload systemd"

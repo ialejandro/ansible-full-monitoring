@@ -1,0 +1,19 @@
+---
+- name: stopped prometheus service
+  service:
+    name: prometheus
+    state: stopped
+    enabled: no
+
+- name: delete all directories and files
+  file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - "{{ prometheus.install_dir }}"
+    - "{{ prometheus.config_dir }}"
+    - "{{ prometheus.data_dir | dirname }}"
+    - '/lib/systemd/system/prometheus.service'
+    - '/usr/bin/prometheus'
+    - '/usr/bin/promtool'
+  notify: "reload systemd"

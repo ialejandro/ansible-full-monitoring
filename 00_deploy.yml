@@ -1,0 +1,11 @@
+---
+- hosts: localhost
+  vars:
+    exporters:
+    - blackbox
+    - node
+  roles:
+    - exporters
+    - prometheus
+    - alertmanager
+    - grafana

@@ -1,0 +1,10 @@
+---
+- name: delete prometheus user
+  user:
+    name: 'prometheus'
+    state: absent
+
+- name: delete prometheus group
+  group:
+    name: 'prometheus'
+    state: absent

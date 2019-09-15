@@ -1,0 +1,8 @@
+---
+- name: remove temp files
+  file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - /tmp/prometheus.tar.gz
+    - "{{ prometheus.install_dir }}/prometheus.yml"

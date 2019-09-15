@@ -1,0 +1,18 @@
+---
+- name: configure permissions
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: prometheus
+    group: prometheus
+    recurse: yes
+  loop:
+    - "{{ alertmanager.install_dir }}"
+    - "{{ alertmanager.config_dir }}"
+    - "{{ alertmanager.data_dir }}"
+
+- name: started alertmanager service
+  service:
+    name: alertmanager
+    state: started
+    enabled: yes

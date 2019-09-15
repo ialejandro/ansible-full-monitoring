@@ -1,0 +1,31 @@
+---
+- name: symlinks binaries on "/usr/bin"
+  file:
+    src: "{{ prometheus.install_dir }}/{{ item }}"
+    dest: "/usr/bin/{{ item }}"
+    state: link
+  loop:
+    - prometheus
+    - promtool
+
+- name: register all rule files
+  debug: msg={{ lookup('fileglob', 'files/*.rules', wantlist=True) }}
+  register: rules
+
+- name: deploy rules on "{{ prometheus.rules_dir }}"
+  copy:
+    src: "{{ item }}"
+    dest: "{{ prometheus.rules_dir }}/{{ item | basename }}"
+  with_items: "{{ rules.msg }}"
+
+- name: deploy configuration on "{{ prometheus.config_dir }}"
+  template:
+    src: config.yml.j2
+    dest: "{{ prometheus.config_dir }}/config.yml"
+  notify: restart prometheus
+
+- name: deploy service on "/lib/systemd/system"
+  template:
+    src: prometheus.service.j2
+    dest: /lib/systemd/system/prometheus.service
+  notify: reload systemd

@@ -1,0 +1,10 @@
+- name: create prometheus datasource
+  grafana_datasource:
+    name: "prometheus"
+    grafana_url: "http://localhost:{{ grafana.port }}"
+    grafana_user: "admin"
+    grafana_password: "admin"
+    org_id: "1"
+    ds_type: "prometheus"
+    ds_url: "http://localhost:{{ prometheus.port }}"
+    is_default: yes

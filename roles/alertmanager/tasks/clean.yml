@@ -1,0 +1,8 @@
+---
+- name: remove temp files
+  file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - /tmp/alertmanager.tar.gz
+    - "{{ alertmanager.install_dir }}/alertmanager.yml"

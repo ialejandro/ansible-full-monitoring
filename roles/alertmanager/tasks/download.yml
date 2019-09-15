@@ -1,0 +1,13 @@
+---
+- name: download alertmanager 
+  get_url:
+    url: "https://github.com/prometheus/alertmanager/releases/download/v{{ alertmanager.version }}/alertmanager-{{ alertmanager.version }}.linux-amd64.tar.gz"
+    dest: /tmp/alertmanager.tar.gz
+    mode: '0644'
+
+- name: extract alertmanager.tar.gz on "{{ alertmanager.install_dir }}"
+  unarchive:
+    src: /tmp/alertmanager.tar.gz
+    dest: "{{ alertmanager.install_dir }}"
+    remote_src: no
+    extra_opts: [--strip-components=1]

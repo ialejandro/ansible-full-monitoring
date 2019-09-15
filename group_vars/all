@@ -1,0 +1,45 @@
+# SERVICES
+prometheus:
+  version:     2.2.0
+  install_dir: /opt/prometheus 
+  config_dir:  /etc/prometheus 
+  rules_dir:   /etc/prometheus/rules.d
+  data_dir:    /var/lib/prometheus/data
+  # config service
+  port:        9090
+  retention:   15d
+
+alertmanager:
+  version:       0.19.0
+  install_dir:   /opt/alertmanager
+  config_dir:    /etc/alertmanager
+  templates_dir: /etc/alertmanager/templates
+  data_dir:      /var/lib/alertmanager/data
+  # config service
+  port:          9093
+  retention:     120h
+
+grafana:
+  version:          6.3.5
+  data_dir:         /var/lib/grafana/data
+  logs_dir:         /var/log/grafana
+  plugins_dir:      /var/lib/grafana/plugins
+  provisioning_dir: /etc/grafana/provisioning
+  # config service
+  port:             3000
+  retention:        24h
+
+# EXPORTERS
+blackbox_exporter:
+  version:     0.15.0
+  install_dir: /opt/blackbox_exporter
+  config_dir:  /etc/blackbox_exporter
+  # config service
+  port:        9115
+
+node_exporter:
+  version:      0.18.1
+  install_dir:  /opt/node_exporter
+  # config service
+  port:         9100
+  path_metrics: /metrics

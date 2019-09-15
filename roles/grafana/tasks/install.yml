@@ -1,0 +1,21 @@
+---
+- name: install grafana-{{ grafana.version }}
+  package:
+    name: "grafana={{ grafana.version }}"
+
+- name: deploy configuration on "/etc/grafana"
+  template:
+    src: 'grafana.ini.j2'
+    dest: "/etc/grafana/grafana.ini"
+
+- name: create custom dirs
+  file:
+    state: directory
+    name: "{{ item }}"
+    owner: grafana
+    group: grafana
+  loop:
+    - "{{ grafana.data_dir }}"
+    - "{{ grafana.logs_dir }}"
+    - "{{ grafana.plugins_dir }}"
+    - "{{ grafana.provisioning_dir }}"

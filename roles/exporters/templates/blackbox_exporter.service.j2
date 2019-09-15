@@ -1,0 +1,21 @@
+# {{ ansible_managed }}
+
+[Unit]
+Description=Blackbox Exporter service
+Wants=network.target
+After=network.target
+
+[Service]
+Type=simple
+ExecReload=/bin/kill -HUP ${MAINPID}
+ExecStart=/usr/bin/blackbox_exporter --config.file="{{ blackbox_exporter.config_dir }}/config.yml" \
+  --web.listen-address=":{{ blackbox_exporter.port }}"
+Restart=on-failure
+KillMode=process
+# Logging
+SyslogIdentifier=blackbox_exporter
+StandardOutput=syslog
+StandardError=syslog
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,10 @@
+---
+- include_tasks: requirements_centos.yml
+  when: ansible_os_family == 'RedHat'
+
+- include_tasks: requirements_debian.yml
+  when: ansible_os_family == 'Debian'
+
+- include_tasks: install.yml
+- include_tasks: run_service.yml
+- include_tasks: configure.yml

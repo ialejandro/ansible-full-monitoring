@@ -1,0 +1,6 @@
+---
+- include_tasks: requirements.yml
+- include_tasks: download.yml
+- include_tasks: configure.yml
+- include_tasks: run_service.yml
+- include_tasks: clean.yml

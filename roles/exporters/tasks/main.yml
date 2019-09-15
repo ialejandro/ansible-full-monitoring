@@ -1,0 +1,6 @@
+---
+- include_tasks: blackbox_exporter.yml
+  when: "exporters is defined and 'blackbox' in exporters"
+
+- include_tasks: node_exporter.yml
+  when: "exporters is defined and 'node' in exporters"

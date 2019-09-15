@@ -1,0 +1,20 @@
+---
+- name: symlinks binaries on "/usr/bin"
+  file:
+    src: "{{ alertmanager.install_dir }}/{{ item }}"
+    dest: "/usr/bin/{{ item }}"
+    state: link
+  loop:
+    - alertmanager
+    - amtool
+
+- name: deploy configuration on "/etc/alertmanager"
+  template:
+    src: config.yml.j2
+    dest: "{{ alertmanager.config_dir }}/config.yml"
+
+- name: deploy service on "/lib/systemd/system"
+  template:
+    src: alertmanager.service.j2
+    dest: /lib/systemd/system/alertmanager.service
+  notify: reload systemd

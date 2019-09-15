@@ -1,0 +1,26 @@
+---
+- name: create prometheus group
+  group:
+    name: prometheus
+    system: yes
+
+- name: create prometheus user
+  user:
+    name: prometheus
+    group: prometheus
+    create_home: no
+    home: /nonexistent
+    shell: /usr/sbin/nologin
+    password: '!'
+    system: yes
+
+- name: create alertmanager folders
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+    - "{{ alertmanager.install_dir }}"
+    - "{{ alertmanager.config_dir }}"
+    - "{{ alertmanager.templates_dir }}"
+    - "{{ alertmanager.data_dir }}"

@@ -1,0 +1,56 @@
+---
+- name: create node_exporter folders
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+    - "{{ node_exporter.install_dir }}"
+
+- name: download node_exporter
+  get_url:
+    url: "https://github.com/prometheus/node_exporter/releases/download/v{{ node_exporter.version }}/node_exporter-{{ node_exporter.version }}.linux-amd64.tar.gz"
+    dest: '/tmp/node_exporter.tar.gz'
+    mode: '0644'
+
+- name: extract node_exporter.tar.gz on "{{ node_exporter.install_dir }}"
+  unarchive:
+    src: '/tmp/node_exporter.tar.gz'
+    dest: "{{ node_exporter.install_dir }}"
+    remote_src: no
+    extra_opts: [--strip-components=1]
+
+- name: symlinks binaries on "/usr/bin"
+  file:
+    src: "{{ node_exporter.install_dir }}/node_exporter"
+    dest: "/usr/bin/node_exporter"
+    state: link
+
+- name: configure permissions
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: 'root'
+    group: 'root'
+    recurse: yes
+  loop:
+    - "{{ node_exporter.install_dir }}"
+
+- name: deploy service on "/lib/systemd/system"
+  template:
+    src: 'node_exporter.service.j2'
+    dest: '/lib/systemd/system/node_exporter.service'
+  notify: "reload systemd"
+
+- name: started node_exporter service
+  service:
+    name: node_exporter
+    state: started
+    enabled: yes
+
+- name: remove temp files
+  file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - '/tmp/node_exporter.tar.gz'

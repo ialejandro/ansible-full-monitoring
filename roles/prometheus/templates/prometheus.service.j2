@@ -1,0 +1,29 @@
+# {{ ansible_managed }}
+
+[Unit]
+Description=Prometheus service
+Wants=network.target
+After=network.target
+
+[Service]
+Type=simple
+User=prometheus
+Group=prometheus
+ExecReload=/bin/kill -HUP ${MAINPID}
+ExecStart=/usr/bin/prometheus --config.file="{{ prometheus.config_dir }}/config.yml" \
+  --web.listen-address="0.0.0.0:{{ prometheus.port }}" \
+  --web.enable-admin-api \
+  --web.console.templates="{{ prometheus.install_dir }}/consoles" \
+  --web.console.libraries="{{ prometheus.install_dir }}/console_libraries" \
+  --web.enable-lifecycle \
+  --storage.tsdb.path="{{ prometheus.data_dir }}/" \
+  --storage.tsdb.retention={{ prometheus.retention }}
+Restart=on-failure
+KillMode=process
+# Logging
+SyslogIdentifier=prometheus
+StandardOutput=syslog
+StandardError=syslog
+
+[Install]
+WantedBy=multi-user.target

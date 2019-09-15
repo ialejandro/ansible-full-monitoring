@@ -1,0 +1,15 @@
+---
+- name: added gpg grafana key
+  rpm_key:
+    state: present
+    key: https://packages.grafana.com/gpg.key
+
+- name: added repository
+  template:
+    src:
+    dest: /etc/yum.repos.d/grafana.repo
+
+- name: install grafana
+  yum:
+    name: grafana={{ grafana.version }}
+    state: present

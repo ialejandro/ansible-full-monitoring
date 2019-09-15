@@ -1,0 +1,13 @@
+---
+- name: download prometheus
+  get_url:
+    url: "https://github.com/prometheus/prometheus/releases/download/v{{ prometheus.version }}/prometheus-{{ prometheus.version }}.linux-amd64.tar.gz"
+    dest: /tmp/prometheus.tar.gz
+    mode: '0644'
+
+- name: extract prometheus.tar.gz on "{{ prometheus.install_dir }}"
+  unarchive:
+    src: /tmp/prometheus.tar.gz
+    dest: "{{ prometheus.install_dir }}"
+    remote_src: no
+    extra_opts: [--strip-components=1]

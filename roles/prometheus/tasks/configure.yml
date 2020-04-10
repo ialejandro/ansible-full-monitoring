@@ -22,7 +22,7 @@
   template:
     src: config.yml.j2
     dest: "{{ prometheus.config_dir }}/config.yml"
-  notify: restart prometheus
+  notify: reload prometheus
 
 - name: deploy service on "/lib/systemd/system"
   template:

@@ -3,7 +3,8 @@
   systemd:
     daemon_reload: yes
 
-- name: restart prometheus
-  systemd:
-    name: prometheus
-    state: restarted
+- name: reload prometheus
+  uri:
+    url: "http://localhost:{{ prometheus.port }}/-/reload"
+    method: POST
+    status_code: 200
